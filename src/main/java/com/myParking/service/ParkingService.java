@@ -14,7 +14,7 @@ public interface ParkingService {
 
 	public int leave(int areaId);
 
-	public Map<ParkingArea, Vehicle> getParkinglotStatus();
+	public Vehicle[] getParkinglotStatus();
 
 	public List<Vehicle> getRegistrationNumbers(String color);
 

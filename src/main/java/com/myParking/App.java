@@ -30,10 +30,10 @@ public class App {
 		status();
 		park("KA01P333", "White");
 		park("DL12AA9999", "White");
-		registration_numbers_for_cars_with_colour("White");
+		/*registration_numbers_for_cars_with_colour("White");
 		slot_numbers_for_cars_with_colour("White");
 		slot_number_for_registration_number("KA01HH3141");
-		slot_number_for_registration_number("MH04AY1111");
+		slot_number_for_registration_number("MH04AY1111");*/
 	}
 
 	private static void create_parking_lot(int areaId) {
@@ -55,14 +55,16 @@ public class App {
 	}
 
 	private static void status() {
-		Map<ParkingArea, Vehicle> slotCarMap = parkingService.getParkinglotStatus();
-
+		//Map<ParkingArea, Vehicle> slotCarMap = parkingService.getParkinglotStatus();
+		Vehicle[] list = parkingService.getParkinglotStatus();
 		System.out.println("Slot No." + "\t" + "Registration No" + "\t" + "Colour");
-		for (Map.Entry<ParkingArea, Vehicle> e : slotCarMap.entrySet()) {
-			if (e.getValue() != null) {
-				System.out.println(
-						e.getKey().getId() + "\t" + e.getValue().getRegistrationNo() + "\t" + e.getValue().getColor());
+		//for (Map.Entry<ParkingArea, Vehicle> e : slotCarMap.entrySet()) {
+		int count = 1;
+		for ( Vehicle e : list) {
+			if (e != null) {
+				System.out.println( count +	"\t" + e.getRegistrationNo() + "\t" + e.getColor());
 			}
+			count++;
 		}
 	}
 

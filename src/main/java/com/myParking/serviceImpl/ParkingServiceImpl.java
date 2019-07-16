@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
-
 import com.myParking.model.ParkingArea;
 import com.myParking.model.Vehicle;
 import com.myParking.service.ParkingService;
@@ -17,7 +16,8 @@ public class ParkingServiceImpl implements ParkingService {
 	private Map<String, ParkingArea> registrationNumberSlotMap;
 
 	PriorityQueue<Integer> getFreeArea = new PriorityQueue<Integer>();
-
+	Vehicle vehicleList[];
+	
 	public ParkingServiceImpl() {
 		parkingAreaMap = new HashMap<ParkingArea, Vehicle>();
 		vehicleColorMap = new HashMap<String, List<Vehicle>>();
@@ -26,29 +26,39 @@ public class ParkingServiceImpl implements ParkingService {
 
 	public void createParkingLot(int capacity) {
 
-		for (int c = 1; c <= capacity; c++) {
-			parkingAreaMap.put(new ParkingArea(c), null);
+		  for (int c = 1; c <= capacity; c++) {
+			//parkingAreaMap.put(new ParkingArea(c), null);
 
 			getFreeArea.add(c);
-		}
+		}  
+		vehicleList = new Vehicle[capacity];
+		 
 	}
 
 	public int park(Vehicle vehicle) {
 		// Get the free slot nearest to entrance
 		int areaId = getFreeSlot();
-		if (areaId > 0) {
+		/*if (areaId > 0) {
 			ParkingArea pa = new ParkingArea(areaId);
 			parkingAreaMap.put(pa, vehicle);
 			addTovehicleColorMap(vehicle);
 			addToRegistrationNumberSlotMap(vehicle, pa);
 		} else {
 			System.out.println("Sorry, parking lot is full");
-		}
+		}*/
 
 		// id is -1 when the parkinglot is full
+		if (areaId > 0) {
+		vehicleList[areaId-1] = vehicle;
+		}else {
+			System.out.println("Sorry, parking lot is full");
+		}
 		return areaId;
+		
+		 
 
 	}
+
 
 	private int getFreeSlot() {
 		if (getFreeArea.size() > 0) {
@@ -58,19 +68,21 @@ public class ParkingServiceImpl implements ParkingService {
 	}
 
 	public int leave(int areaId) {
-		Vehicle vehicle = parkingAreaMap.get(new ParkingArea(areaId));
+		/*Vehicle vehicle = parkingAreaMap.get(new ParkingArea(areaId));
 		parkingAreaMap.put(new ParkingArea(areaId), null);
-		// removeFromColorCarListMap(c);
-		// removeFromRegistrationNumberSlotMap(c);
+		//removeColorVehicleListMap(vehicle);
+		//removeFromRegistrationNumberSlotMap(vehicle);
 
 		// Add it to free slots
+		getFreeArea.add(areaId);*/
+		
+		vehicleList[areaId-1] = null;
 		getFreeArea.add(areaId);
-
 		return areaId;
 	}
 
-	public Map<ParkingArea, Vehicle> getParkinglotStatus() {
-		return this.parkingAreaMap;
+	public Vehicle[] getParkinglotStatus() {
+		return this.vehicleList;
 	}
 
 	private void addTovehicleColorMap(Vehicle vehicle) {
@@ -110,4 +122,19 @@ public class ParkingServiceImpl implements ParkingService {
 		}
 		return pa;
 	}
+
+	private void removeColorVehicleListMap(Vehicle vehicle) {
+		String color = vehicle.getColor();
+		List<Vehicle> vehicleList = vehicleColorMap.get(color);
+		if (vehicleList == null) {
+
+		} else {
+			vehicleList.remove(vehicle);
+		}
+	}
+	
+	private void removeFromRegistrationNumberSlotMap(Vehicle vehicle)
+    {
+        registrationNumberSlotMap.remove(vehicle.getRegistrationNo());
+    }
 }
