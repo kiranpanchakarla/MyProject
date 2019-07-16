@@ -21,5 +21,8 @@ public interface ParkingService {
 	public ParkingArea getSlotForVehicle(String registrationNumber);
 
 	public List<ParkingArea> getSlots(String color);
+	
+	public String[] getVehicleByColor(String color);
+	
 
 }

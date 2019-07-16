@@ -137,4 +137,20 @@ public class ParkingServiceImpl implements ParkingService {
     {
         registrationNumberSlotMap.remove(vehicle.getRegistrationNo());
     }
+
+	@SuppressWarnings("null")
+	public String[] getVehicleByColor(String color) {
+		String[] vehicleNumbers = new String[vehicleList.length];
+		
+		for(int i=0; i<vehicleList.length ;i++) {
+			if(vehicleList[i].getColor().equals(color)) {
+				vehicleNumbers[i] = vehicleList[i].getRegistrationNo();
+			}
+			
+		}
+		
+		return vehicleNumbers;
+
+       
+	}
 }

@@ -30,8 +30,8 @@ public class App {
 		status();
 		park("KA01P333", "White");
 		park("DL12AA9999", "White");
-		/*registration_numbers_for_cars_with_colour("White");
-		slot_numbers_for_cars_with_colour("White");
+		registration_numbers_for_cars_with_colour("White");
+		/*slot_numbers_for_cars_with_colour("White");
 		slot_number_for_registration_number("KA01HH3141");
 		slot_number_for_registration_number("MH04AY1111");*/
 	}
@@ -69,7 +69,7 @@ public class App {
 	}
 
 	private static void registration_numbers_for_cars_with_colour(String color) {
-		List<Vehicle> vehiclesList = parkingService.getRegistrationNumbers(color);
+		/*List<Vehicle> vehiclesList = parkingService.getRegistrationNumbers(color);
 		List<String> registrationNumbers = new ArrayList<String>();
 		for (Vehicle vel : vehiclesList) {
 			registrationNumbers.add(vel.getRegistrationNo());
@@ -80,8 +80,17 @@ public class App {
 			if (c != registrationNumbers.size() - 1) {
 				sb.append(", ");
 			}
+		}*/
+		
+		String[] list = parkingService.getVehicleByColor(color);
+		String result = null;
+		for(String value : list) {
+			if(value != null) {
+				result += value;
+			}
+			
 		}
-		System.out.println(sb.toString());
+		System.out.println(result);
 	}
 
 	private static void slot_number_for_registration_number(String registrationNumber) {
