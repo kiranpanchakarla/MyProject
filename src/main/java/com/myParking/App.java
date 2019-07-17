@@ -3,12 +3,10 @@ package com.myParking;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Scanner;
-
-import com.myParking.model.ParkingArea;
 import com.myParking.model.Vehicle;
 import com.myParking.service.ParkingService;
 import com.myParking.serviceImpl.ParkingServiceImpl;
+import com.myParking.util.Constants;
 
 /**
  * Hello world!
@@ -20,7 +18,7 @@ public class App {
 	public static void main(String[] args) {
 		parkingService = new ParkingServiceImpl();
 
-		create_parking_lot(6);
+		create_parking_lot(10);
 		park("KA01HH1234", "White");
 		park("KA01HH9999", "White");
 		park("KA01BB0001", "Black");
@@ -37,21 +35,17 @@ public class App {
 		slot_number_for_registration_number("MH04AY1111");
 
 		// file input
-		
-		/*if (args.length > 0) {
-			String fileName = args[0];
-			processFileInput(fileName);
-		} else {
 
-			printAvailableCommands();
+		/*
+		 * if (args.length > 0) { String fileName = args[0]; processFileInput(fileName);
+		 * } else {
+		 * 
+		 * printAvailableCommands();
+		 * 
+		 * Scanner scanner = new Scanner(System.in); while (true) { String commandln =
+		 * scanner.nextLine(); processCommand(commandln); } }
+		 */
 
-			Scanner scanner = new Scanner(System.in);
-			while (true) {
-				String commandln = scanner.nextLine();
-				processCommand(commandln);
-			}
-		}*/
-		 
 	}
 
 	private static void printAvailableCommands() {
@@ -68,7 +62,6 @@ public class App {
 
 	private static void create_parking_lot(int areaId) {
 		parkingService.createParkingLot(areaId);
-		System.out.println("Created a parking lot with " + areaId + " slots");
 	}
 
 	private static void park(String registrationNumber, String color) {
@@ -82,39 +75,26 @@ public class App {
 
 	private static void leave(int areaId) {
 		parkingService.leave(areaId);
-		System.out.println("Slot number " + areaId + " is free");
+
 	}
 
 	private static void status() {
-		ParkingArea[] list = parkingService.getParkinglotStatus();
-		System.out.println("Slot No." + " " + "Registration No" + " " + "Colour");
-		for (ParkingArea e : list) {
-			if (e.getVehicle() != null) {
-				System.out.println(e.getId() + "\t" + e.getVehicle().getRegistrationNo() + "\t" + e.getVehicle().getColor());
-			}
-		}
+		parkingService.getParkinglotStatus();
+
 	}
 
 	private static void registration_numbers_for_cars_with_colour(String color) {
 
-		String list = parkingService.getVehicleByColor(color);
+		parkingService.getDetials(color, Constants.registerColor.getConstant());
 
-		System.out.println(list);
 	}
 
 	private static void slot_number_for_registration_number(String registrationNumber) {
-		int areaId = parkingService.getSlotOfVehicle(registrationNumber);
-		if (areaId == 0) {
-			System.out.println("Not found");
-		} else {
-			System.out.println(areaId);
-		}
+		parkingService.getDetials(registrationNumber, Constants.slotRegister.getConstant());
 	}
 
 	private static void slot_numbers_for_cars_with_colour(String color) {
-		String pa = parkingService.getSlots(color);
-
-		System.out.println(pa);
+		parkingService.getDetials(color, Constants.slotColor.getConstant());
 	}
 
 	private static void processCommand(String commandln) {

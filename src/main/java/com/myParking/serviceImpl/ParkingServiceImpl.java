@@ -3,6 +3,7 @@ package com.myParking.serviceImpl;
 import com.myParking.model.ParkingArea;
 import com.myParking.model.Vehicle;
 import com.myParking.service.ParkingService;
+import com.myParking.util.Constants;
 
 public class ParkingServiceImpl implements ParkingService {
 
@@ -15,39 +16,31 @@ public class ParkingServiceImpl implements ParkingService {
 	public void createParkingLot(int capacity) {
 
 		parkingList = new ParkingArea[capacity];
-		/*int slot = 1;
-		for (int i = 0; i < capacity; i++) {
-			ParkingArea pa = new ParkingArea();
-			Vehicle vehicle = new Vehicle();
-			pa.setId(slot);
-			pa.setSlot(false);
-			pa.setVehicle(vehicle);
-			parkingList[i] = pa;
-			slot++;
-		}*/
+		System.out.println("Created a parking lot with " + capacity + " slots");
 	}
 
 	public int park(Vehicle vehicle) {
 
-		int position = getFreeSlot();
+		int position = getPosition();
+		int slot = position + 1;
 		if (position >= 0) {
 			ParkingArea pa = new ParkingArea();
-			pa.setId(position);
-			pa.setSlot(true);
+
+			pa.setId(slot);
 			pa.setVehicle(vehicle);
 			parkingList[position] = pa;
 		} else {
 			System.out.println("Sorry, parking lot is full");
 		}
-		return position;
+		return slot;
 
 	}
 
-	private int getFreeSlot() {
+	private int getPosition() {
 		int slot = -1;
-		
+
 		for (int i = 0; i < parkingList.length; i++) {
-			if (parkingList[i] ==  null) {
+			if (parkingList[i] == null) {
 				slot = i;
 				break;
 			}
@@ -56,51 +49,60 @@ public class ParkingServiceImpl implements ParkingService {
 	}
 
 	public int leave(int areaId) {
-		ParkingArea pa = new ParkingArea();
-		pa.setId(areaId);
-		pa.setSlot(false);
-		pa.setVehicle(null);
-		parkingList[areaId-1] = pa;
+		if (parkingList.length > areaId) {
+
+			parkingList[areaId - 1] = null;
+			System.out.println("Slot number " + areaId + " is free");
+		} else {
+			System.out.println("Slot number " + areaId + " doesnt exists!");
+		}
+
 		return areaId;
 	}
 
-	public ParkingArea[] getParkinglotStatus() {
-		return this.parkingList;
+	public void getParkinglotStatus() {
+		System.out.println("Slot No." + " " + "Registration No" + " " + "Colour");
+		for (ParkingArea e : parkingList) {
+			if (e != null) {
+				System.out.println(
+						e.getId() + "\t" + e.getVehicle().getRegistrationNo() + "\t" + e.getVehicle().getColor());
+			}
+		}
 	}
 
-	public String getSlots(String color) {
+	public void getDetials(String details, String method) {
+
 		String result = "";
+		int slot = 0;
 		for (int i = 0; i < parkingList.length; i++) {
-			if (parkingList[i].getVehicle().getColor().equals(color)) {
-				result = result + " " + (i + 1);
+			if (parkingList[i] != null) {
+				if (method.equals(Constants.slotColor.getConstant())) {
+					if (parkingList[i].getVehicle().getColor().equals(details)) {
+						result = result + " " + (i + 1);
+					}
+				} else if (method.equals(Constants.registerColor.getConstant())) {
+					if (parkingList[i].getVehicle().getColor().equals(details)) {
+						result = result + "," + parkingList[i].getVehicle().getRegistrationNo();
+					}
+				} else {
+					if (parkingList[i].getVehicle().getRegistrationNo().equals(details)) {
+						slot = i + 1;
+					}
+				}
+
 			}
 
 		}
-		return result.substring(1);
-	}
 
-	public String getVehicleByColor(String color) {
-		String vehicleNumbers = "";
-
-		for (int i = 0; i < parkingList.length; i++) {
-			if (parkingList[i].getVehicle().getColor().equals(color)) {
-				vehicleNumbers = vehicleNumbers + "," + parkingList[i].getVehicle().getRegistrationNo();
+		if (method.equals(Constants.slotRegister.getConstant())) {
+			if (slot != 0) {
+				System.out.println(slot);
+			} else {
+				System.out.println("Not found");
 			}
-
+		} else {
+			System.out.println(result.substring(1));
 		}
 
-		return vehicleNumbers.substring(1);
-
-	}
-
-	public int getSlotOfVehicle(String registrationNumber) {
-		int areaId = 0;
-		for (int i = 0; i < parkingList.length; i++) {
-			if (parkingList[i].getVehicle().getRegistrationNo().equals(registrationNumber)) {
-				areaId = i + 1;
-			}
-
-		}
-		return areaId;
 	}
 }
