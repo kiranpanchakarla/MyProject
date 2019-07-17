@@ -2,11 +2,13 @@ package com.myParking.model;
 
 public class Vehicle {
 
-	private String	registrationNo	= null;
-	private String	color = null;
-	
+	private String registrationNo;
+	private String color;
+
+	public Vehicle() {
+	}
+
 	public Vehicle(String registrationNo, String color) {
-		super();
 		this.registrationNo = registrationNo;
 		this.color = color;
 	}
@@ -31,6 +33,5 @@ public class Vehicle {
 	public String toString() {
 		return "Vehicle [registrationNo=" + registrationNo + ", color=" + color + "]";
 	}
-	
-	
+
 }

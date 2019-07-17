@@ -1,8 +1,14 @@
 package com.myParking.model;
 
-public class ParkingArea {
+public class ParkingArea{
 
 	private int id;
+
+	private Vehicle vehicle;
+
+	public ParkingArea() {
+
+	}
 
 	public int getId() {
 		return id;
@@ -12,15 +18,17 @@ public class ParkingArea {
 		this.id = id;
 	}
 
-	public ParkingArea(int id) {
-		super();
-		this.id = id;
+	public Vehicle getVehicle() {
+		return vehicle;
+	}
+
+	public void setVehicle(Vehicle vehicle) {
+		this.vehicle = vehicle;
 	}
 
 	@Override
 	public String toString() {
-		return "ParkingArea [id=" + id + "]";
+		return "ParkingArea [id=" + id + ", vehicle=" + vehicle + "]";
 	}
-	
-	
+
 }

@@ -1,156 +1,108 @@
 package com.myParking.serviceImpl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.PriorityQueue;
 import com.myParking.model.ParkingArea;
 import com.myParking.model.Vehicle;
 import com.myParking.service.ParkingService;
+import com.myParking.util.Constants;
 
 public class ParkingServiceImpl implements ParkingService {
 
-	private Map<ParkingArea, Vehicle> parkingAreaMap;
-	private Map<String, List<Vehicle>> vehicleColorMap;
-	private Map<String, ParkingArea> registrationNumberSlotMap;
+	ParkingArea parkingList[];
 
-	PriorityQueue<Integer> getFreeArea = new PriorityQueue<Integer>();
-	Vehicle vehicleList[];
-	
 	public ParkingServiceImpl() {
-		parkingAreaMap = new HashMap<ParkingArea, Vehicle>();
-		vehicleColorMap = new HashMap<String, List<Vehicle>>();
-		registrationNumberSlotMap = new HashMap<String, ParkingArea>();
+
 	}
 
 	public void createParkingLot(int capacity) {
 
-		  for (int c = 1; c <= capacity; c++) {
-			//parkingAreaMap.put(new ParkingArea(c), null);
-
-			getFreeArea.add(c);
-		}  
-		vehicleList = new Vehicle[capacity];
-		 
+		parkingList = new ParkingArea[capacity];
+		System.out.println("Created a parking lot with " + capacity + " slots");
 	}
 
 	public int park(Vehicle vehicle) {
-		// Get the free slot nearest to entrance
-		int areaId = getFreeSlot();
-		/*if (areaId > 0) {
-			ParkingArea pa = new ParkingArea(areaId);
-			parkingAreaMap.put(pa, vehicle);
-			addTovehicleColorMap(vehicle);
-			addToRegistrationNumberSlotMap(vehicle, pa);
+
+		int position = getPosition();
+		int slot = position + 1;
+		if (position >= 0) {
+			ParkingArea pa = new ParkingArea();
+
+			pa.setId(slot);
+			pa.setVehicle(vehicle);
+			parkingList[position] = pa;
 		} else {
 			System.out.println("Sorry, parking lot is full");
-		}*/
-
-		// id is -1 when the parkinglot is full
-		if (areaId > 0) {
-		vehicleList[areaId-1] = vehicle;
-		}else {
-			System.out.println("Sorry, parking lot is full");
 		}
-		return areaId;
-		
-		 
+		return slot;
 
 	}
 
+	private int getPosition() {
+		int slot = -1;
 
-	private int getFreeSlot() {
-		if (getFreeArea.size() > 0) {
-			return getFreeArea.poll();
-		} else
-			return -1;
+		for (int i = 0; i < parkingList.length; i++) {
+			if (parkingList[i] == null) {
+				slot = i;
+				break;
+			}
+		}
+		return slot;
 	}
 
 	public int leave(int areaId) {
-		/*Vehicle vehicle = parkingAreaMap.get(new ParkingArea(areaId));
-		parkingAreaMap.put(new ParkingArea(areaId), null);
-		//removeColorVehicleListMap(vehicle);
-		//removeFromRegistrationNumberSlotMap(vehicle);
+		if (parkingList.length > areaId) {
 
-		// Add it to free slots
-		getFreeArea.add(areaId);*/
-		
-		vehicleList[areaId-1] = null;
-		getFreeArea.add(areaId);
+			parkingList[areaId - 1] = null;
+			System.out.println("Slot number " + areaId + " is free");
+		} else {
+			System.out.println("Slot number " + areaId + " doesnt exists!");
+		}
+
 		return areaId;
 	}
 
-	public Vehicle[] getParkinglotStatus() {
-		return this.vehicleList;
-	}
-
-	private void addTovehicleColorMap(Vehicle vehicle) {
-		String color = vehicle.getColor();
-		List<Vehicle> vehicleList = vehicleColorMap.get(color);
-		if (vehicleList == null) {
-			vehicleList = new ArrayList<Vehicle>();
-			vehicleList.add(vehicle);
-			vehicleColorMap.put(color, vehicleList);
-		} else {
-			vehicleList.add(vehicle);
-		}
-
-	}
-
-	public List<Vehicle> getRegistrationNumbers(String color) {
-		return vehicleColorMap.get(color);
-	}
-
-	private void addToRegistrationNumberSlotMap(Vehicle vehicle, ParkingArea pa) {
-		registrationNumberSlotMap.put(vehicle.getRegistrationNo(), pa);
-	}
-
-	public ParkingArea getSlotForVehicle(String registrationNumber) {
-		if (registrationNumberSlotMap.containsKey(registrationNumber))
-			return registrationNumberSlotMap.get(registrationNumber);
-		else
-			return null;
-	}
-
-	public List<ParkingArea> getSlots(String color) {
-		List<Vehicle> vehicle = vehicleColorMap.get(color);
-		List<ParkingArea> pa = new ArrayList<ParkingArea>();
-		for (Vehicle vel : vehicle) {
-			ParkingArea parkingArea = registrationNumberSlotMap.get(vel.getRegistrationNo());
-			pa.add(parkingArea);
-		}
-		return pa;
-	}
-
-	private void removeColorVehicleListMap(Vehicle vehicle) {
-		String color = vehicle.getColor();
-		List<Vehicle> vehicleList = vehicleColorMap.get(color);
-		if (vehicleList == null) {
-
-		} else {
-			vehicleList.remove(vehicle);
-		}
-	}
-	
-	private void removeFromRegistrationNumberSlotMap(Vehicle vehicle)
-    {
-        registrationNumberSlotMap.remove(vehicle.getRegistrationNo());
-    }
-
-	@SuppressWarnings("null")
-	public String[] getVehicleByColor(String color) {
-		String[] vehicleNumbers = new String[vehicleList.length];
-		
-		for(int i=0; i<vehicleList.length ;i++) {
-			if(vehicleList[i].getColor().equals(color)) {
-				vehicleNumbers[i] = vehicleList[i].getRegistrationNo();
+	public void getParkinglotStatus() {
+		System.out.println("Slot No." + " " + "Registration No" + " " + "Colour");
+		for (ParkingArea e : parkingList) {
+			if (e != null) {
+				System.out.println(
+						e.getId() + "\t" + e.getVehicle().getRegistrationNo() + "\t" + e.getVehicle().getColor());
 			}
-			
 		}
-		
-		return vehicleNumbers;
+	}
 
-       
+	public void getDetials(String details, String method) {
+
+		String result = "";
+		int slot = 0;
+		for (int i = 0; i < parkingList.length; i++) {
+			if (parkingList[i] != null) {
+				if (method.equals(Constants.slotColor.getConstant())) {
+					if (parkingList[i].getVehicle().getColor().equals(details)) {
+						result = result + " " + (i + 1);
+					}
+				} else if (method.equals(Constants.registerColor.getConstant())) {
+					if (parkingList[i].getVehicle().getColor().equals(details)) {
+						result = result + "," + parkingList[i].getVehicle().getRegistrationNo();
+					}
+				} else {
+					if (parkingList[i].getVehicle().getRegistrationNo().equals(details)) {
+						slot = i + 1;
+					}
+				}
+
+			}
+
+		}
+
+		if (method.equals(Constants.slotRegister.getConstant())) {
+			if (slot != 0) {
+				System.out.println(slot);
+			} else {
+				System.out.println("Not found");
+			}
+		} else {
+			System.out.println(result.substring(1));
+		}
+
 	}
 }
