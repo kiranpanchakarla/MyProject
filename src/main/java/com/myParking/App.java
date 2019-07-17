@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
+import com.myParking.model.ParkingArea;
 import com.myParking.model.Vehicle;
 import com.myParking.service.ParkingService;
 import com.myParking.serviceImpl.ParkingServiceImpl;
@@ -19,32 +20,29 @@ public class App {
 	public static void main(String[] args) {
 		parkingService = new ParkingServiceImpl();
 
-		
-		 /*create_parking_lot(6); 
-		 park("KA01HH1234", "White"); 
-		 park("KA01HH9999","White"); 
-		 park("KA01BB0001", "Black"); 
-		 park("KA01HH7777", "Red");
-		 park("KA01HH2701", "Blue"); 
-		 park("KA01HH3141", "Black"); 
-		 leave(4); status();
-		 park("KA01P333", "White"); 
-		 park("DL12AA9999", "White");
-		  registration_numbers_for_cars_with_colour("White");
-		  slot_numbers_for_cars_with_colour("White");
-		  slot_number_for_registration_number("KA01HH3141");
-		  slot_number_for_registration_number("MH04AY1111");*/
-		 
+		create_parking_lot(6);
+		park("KA01HH1234", "White");
+		park("KA01HH9999", "White");
+		park("KA01BB0001", "Black");
+		park("KA01HH7777", "Red");
+		park("KA01HH2701", "Blue");
+		park("KA01HH3141", "Black");
+		leave(4);
+		status();
+		park("KA01P333", "White");
+		park("DL12AA9999", "White");
+		registration_numbers_for_cars_with_colour("White");
+		slot_numbers_for_cars_with_colour("White");
+		slot_number_for_registration_number("KA01HH3141");
+		slot_number_for_registration_number("MH04AY1111");
 
 		// file input
-		if (args.length > 0) {
+		
+		/*if (args.length > 0) {
 			String fileName = args[0];
-			System.out.println("********************* Going to execute the file input*********************");
 			processFileInput(fileName);
 		} else {
-			System.out.println("==============================================================================");
-			System.out.println("********************* WELCOME TO PARKING LOT CONSOLE *********************");
-			System.out.println("==============================================================================");
+
 			printAvailableCommands();
 
 			Scanner scanner = new Scanner(System.in);
@@ -52,7 +50,8 @@ public class App {
 				String commandln = scanner.nextLine();
 				processCommand(commandln);
 			}
-		}
+		}*/
+		 
 	}
 
 	private static void printAvailableCommands() {
@@ -78,7 +77,6 @@ public class App {
 		if (areaId > 0) {
 			System.out.println("Allocated slot number: " + areaId);
 		}
-			
 
 	}
 
@@ -88,14 +86,12 @@ public class App {
 	}
 
 	private static void status() {
-		Vehicle[] list = parkingService.getParkinglotStatus();
-		System.out.println("Slot No." + "\t" + "Registration No" + "\t" + "Colour");
-		int count = 1;
-		for (Vehicle e : list) {
-			if (e != null) {
-				System.out.println(count + "\t" + e.getRegistrationNo() + "\t" + e.getColor());
+		ParkingArea[] list = parkingService.getParkinglotStatus();
+		System.out.println("Slot No." + " " + "Registration No" + " " + "Colour");
+		for (ParkingArea e : list) {
+			if (e.getVehicle() != null) {
+				System.out.println(e.getId() + "\t" + e.getVehicle().getRegistrationNo() + "\t" + e.getVehicle().getColor());
 			}
-			count++;
 		}
 	}
 
@@ -180,45 +176,42 @@ public class App {
 		}
 
 	}
-	
-	private static void processFileInput(String fileName)
-    {
-        BufferedReader br = null;
-        FileReader fr = null;
-        try {
 
-            //br = new BufferedReader(new FileReader(FILENAME));
-            fr = new FileReader(fileName);
-            br = new BufferedReader(fr);
+	private static void processFileInput(String fileName) {
+		BufferedReader br = null;
+		FileReader fr = null;
+		try {
 
-            String sCurrentLine;
+			// br = new BufferedReader(new FileReader(FILENAME));
+			fr = new FileReader(fileName);
+			br = new BufferedReader(fr);
 
-            while ((sCurrentLine = br.readLine()) != null)
-            {
-                processCommand(sCurrentLine);
-            }
- 
-        } catch (IOException e) {
+			String sCurrentLine;
 
-            e.printStackTrace();
+			while ((sCurrentLine = br.readLine()) != null) {
+				processCommand(sCurrentLine);
+			}
 
-        } finally
-        {
-                try {
+		} catch (IOException e) {
 
-                if (br != null)
-                    br.close();
+			e.printStackTrace();
 
-                if (fr != null)
-                    fr.close();
+		} finally {
+			try {
 
-            } catch (IOException ex) {
+				if (br != null)
+					br.close();
 
-                ex.printStackTrace();
+				if (fr != null)
+					fr.close();
 
-            }
+			} catch (IOException ex) {
 
-        }
+				ex.printStackTrace();
 
-    }
+			}
+
+		}
+
+	}
 }

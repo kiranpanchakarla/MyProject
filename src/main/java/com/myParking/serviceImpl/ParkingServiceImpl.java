@@ -6,97 +6,100 @@ import com.myParking.service.ParkingService;
 
 public class ParkingServiceImpl implements ParkingService {
 
-	Vehicle vehicleList[];
-	boolean slots[];
 	ParkingArea parkingList[];
+
 	public ParkingServiceImpl() {
-		
+
 	}
 
 	public void createParkingLot(int capacity) {
-       
-		
-		slots = new boolean[capacity];
-		vehicleList = new Vehicle[capacity];
+
 		parkingList = new ParkingArea[capacity];
-		int slot = 1;
-		for(int i=0; i < capacity; i++) {
+		/*int slot = 1;
+		for (int i = 0; i < capacity; i++) {
 			ParkingArea pa = new ParkingArea();
+			Vehicle vehicle = new Vehicle();
 			pa.setId(slot);
 			pa.setSlot(false);
+			pa.setVehicle(vehicle);
 			parkingList[i] = pa;
 			slot++;
-		}
+		}*/
 	}
 
 	public int park(Vehicle vehicle) {
 
-		int areaId = getFreeSlot();
-		if (areaId > 0) {
-		vehicleList[areaId-1] = vehicle;
-		parkingList[areaId-1].setSlot(true);
-		}else {
+		int position = getFreeSlot();
+		if (position >= 0) {
+			ParkingArea pa = new ParkingArea();
+			pa.setId(position);
+			pa.setSlot(true);
+			pa.setVehicle(vehicle);
+			parkingList[position] = pa;
+		} else {
 			System.out.println("Sorry, parking lot is full");
 		}
-		return areaId;
+		return position;
 
 	}
 
-
 	private int getFreeSlot() {
-		int slot = 0;
-		 for(int i=0; i< parkingList.length;i++) {
-			 if(parkingList[i].isSlot() == false) {
-				 slot =parkingList[i].getId();
-				 break;
-			 }
-		 }
+		int slot = -1;
+		
+		for (int i = 0; i < parkingList.length; i++) {
+			if (parkingList[i] ==  null) {
+				slot = i;
+				break;
+			}
+		}
 		return slot;
 	}
 
 	public int leave(int areaId) {
-		vehicleList[areaId-1] = null;
-		parkingList[areaId-1].setSlot(false);
+		ParkingArea pa = new ParkingArea();
+		pa.setId(areaId);
+		pa.setSlot(false);
+		pa.setVehicle(null);
+		parkingList[areaId-1] = pa;
 		return areaId;
 	}
 
-	public Vehicle[] getParkinglotStatus() {
-		return this.vehicleList;
+	public ParkingArea[] getParkinglotStatus() {
+		return this.parkingList;
 	}
 
 	public String getSlots(String color) {
 		String result = "";
-		for(int i=0; i<vehicleList.length ;i++) {
-			if(vehicleList[i].getColor().equals(color)) {
-				result = result + " "+ (i+1);
+		for (int i = 0; i < parkingList.length; i++) {
+			if (parkingList[i].getVehicle().getColor().equals(color)) {
+				result = result + " " + (i + 1);
 			}
-			
+
 		}
 		return result.substring(1);
 	}
 
 	public String getVehicleByColor(String color) {
 		String vehicleNumbers = "";
-		
-		for(int i=0; i<vehicleList.length ;i++) {
-			if(vehicleList[i].getColor().equals(color)) {
-				vehicleNumbers = vehicleNumbers + "," +  vehicleList[i].getRegistrationNo();
+
+		for (int i = 0; i < parkingList.length; i++) {
+			if (parkingList[i].getVehicle().getColor().equals(color)) {
+				vehicleNumbers = vehicleNumbers + "," + parkingList[i].getVehicle().getRegistrationNo();
 			}
-			
+
 		}
-		
+
 		return vehicleNumbers.substring(1);
 
-       
 	}
 
 	public int getSlotOfVehicle(String registrationNumber) {
 		int areaId = 0;
-		for(int i=0; i<vehicleList.length ;i++) {
-			if(vehicleList[i].getRegistrationNo().equals(registrationNumber)) {
-				areaId = i+1; 
+		for (int i = 0; i < parkingList.length; i++) {
+			if (parkingList[i].getVehicle().getRegistrationNo().equals(registrationNumber)) {
+				areaId = i + 1;
 			}
-			
+
 		}
 		return areaId;
 	}

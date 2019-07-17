@@ -1,5 +1,6 @@
 package com.myParking.service;
 
+import com.myParking.model.ParkingArea;
 import com.myParking.model.Vehicle;
 
 public interface ParkingService {
@@ -10,12 +11,12 @@ public interface ParkingService {
 
 	public int leave(int areaId);
 
-	public Vehicle[] getParkinglotStatus();
+	public ParkingArea[] getParkinglotStatus();
 
 	public String getSlots(String color);
-	
+
 	public String getVehicleByColor(String color);
-	
+
 	public int getSlotOfVehicle(String registrationNumber);
 
 }
