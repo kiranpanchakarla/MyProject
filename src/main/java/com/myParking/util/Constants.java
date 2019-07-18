@@ -4,7 +4,11 @@ public enum Constants {
 	
 	slotColor("slot_numbers_for_cars_with_colour"),
 	registerColor("registration_numbers_for_cars_with_colour"),
-	slotRegister("slot_number_for_registration_number");
+	slotRegister("slot_number_for_registration_number"),
+	create("create_parking_lot"),
+	park("park"),
+	leave("leave"),
+	status("status");
 	
 	private String constant;
 

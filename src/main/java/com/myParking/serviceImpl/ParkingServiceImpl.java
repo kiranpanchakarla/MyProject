@@ -1,5 +1,7 @@
 package com.myParking.serviceImpl;
 
+import java.util.Arrays;
+
 import com.myParking.model.ParkingArea;
 import com.myParking.model.Vehicle;
 import com.myParking.service.ParkingService;
@@ -13,10 +15,16 @@ public class ParkingServiceImpl implements ParkingService {
 
 	}
 
-	public void createParkingLot(int capacity) {
-
-		parkingList = new ParkingArea[capacity];
-		System.out.println("Created a parking lot with " + capacity + " slots");
+	public int createParkingLot(int capacity) {
+        if(parkingList == null) {
+        	parkingList = new ParkingArea[capacity];
+        }else {
+        	parkingList = Arrays.copyOf(parkingList, parkingList.length+capacity);
+        }
+		//parkingList = new ParkingArea[capacity];
+		int slots = parkingList.length;
+		System.out.println("Created a parking lot with " + slots + " slots");
+		return slots;
 	}
 
 	public int park(Vehicle vehicle) {
@@ -38,13 +46,14 @@ public class ParkingServiceImpl implements ParkingService {
 
 	private int getPosition() {
 		int slot = -1;
-
+        if(parkingList.length != 0) {
 		for (int i = 0; i < parkingList.length; i++) {
 			if (parkingList[i] == null) {
 				slot = i;
 				break;
 			}
 		}
+        }
 		return slot;
 	}
 

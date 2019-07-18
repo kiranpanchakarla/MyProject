@@ -4,7 +4,7 @@ import com.myParking.model.Vehicle;
 
 public interface ParkingService {
 
-	public void createParkingLot(int capacity);
+	public int createParkingLot(int capacity);
 
 	public int park(Vehicle vehicle);
 

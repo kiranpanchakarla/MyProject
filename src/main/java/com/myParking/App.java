@@ -3,6 +3,7 @@ package com.myParking;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Scanner;
 import com.myParking.model.Vehicle;
 import com.myParking.service.ParkingService;
 import com.myParking.serviceImpl.ParkingServiceImpl;
@@ -18,39 +19,28 @@ public class App {
 	public static void main(String[] args) {
 		parkingService = new ParkingServiceImpl();
 
-		create_parking_lot(10);
-		park("KA01HH1234", "White");
-		park("KA01HH9999", "White");
-		park("KA01BB0001", "Black");
-		park("KA01HH7777", "Red");
-		park("KA01HH2701", "Blue");
-		park("KA01HH3141", "Black");
-		leave(4);
-		status();
-		park("KA01P333", "White");
-		park("DL12AA9999", "White");
-		registration_numbers_for_cars_with_colour("White");
-		slot_numbers_for_cars_with_colour("White");
-		slot_number_for_registration_number("KA01HH3141");
-		slot_number_for_registration_number("MH04AY1111");
-
 		// file input
 
-		/*
-		 * if (args.length > 0) { String fileName = args[0]; processFileInput(fileName);
-		 * } else {
-		 * 
-		 * printAvailableCommands();
-		 * 
-		 * Scanner scanner = new Scanner(System.in); while (true) { String commandln =
-		 * scanner.nextLine(); processCommand(commandln); } }
-		 */
+		 if(args.length > 0)
+        {
+            String fileName = args[0];
+            processFileInput(fileName);
+        }
+        else
+        {
+            printAvailableCommands();
+
+            Scanner scanner = new Scanner(System.in);
+            while (true) {
+                String commandln = scanner.nextLine();
+                processCommand(commandln);
+            }
+        }  
 
 	}
 
 	private static void printAvailableCommands() {
 		System.out.println("Available commands:");
-		System.out.println("\t help");
 		System.out.println("\t create_parking_lot <slots>");
 		System.out.println("\t park <RegistrationNumber> <Color>");
 		System.out.println("\t leave <slot>");
@@ -75,18 +65,14 @@ public class App {
 
 	private static void leave(int areaId) {
 		parkingService.leave(areaId);
-
 	}
 
 	private static void status() {
 		parkingService.getParkinglotStatus();
-
 	}
 
 	private static void registration_numbers_for_cars_with_colour(String color) {
-
 		parkingService.getDetials(color, Constants.registerColor.getConstant());
-
 	}
 
 	private static void slot_number_for_registration_number(String registrationNumber) {
@@ -98,18 +84,18 @@ public class App {
 	}
 
 	private static void processCommand(String commandln) {
-		String[] commandInput = commandln.split(" ");
+		String sample = commandln.trim();
+		String[] commandInput = sample.trim().split("\\s+");
 		String command = commandInput[0];
-		if ("help".equals(command)) {
-			printAvailableCommands();
-		} else if ("create_parking_lot".equals(command)) {
+		 
+		if(command.contains(Constants.create.getConstant())) {
 			if (commandInput.length != 2) {
 				System.out.println("Invalid input");
 			} else {
 				int nrOfSlots = Integer.parseInt(commandInput[1]);
 				create_parking_lot(nrOfSlots);
 			}
-		} else if ("park".equals(command)) {
+		} else if (command.equals(Constants.park.getConstant())) {
 			if (commandInput.length != 3) {
 				System.out.println("Invalid input");
 			} else {
@@ -117,34 +103,34 @@ public class App {
 				String color = commandInput[2];
 				park(registrationNumber, color);
 			}
-		} else if ("leave".equals(command)) {
+		} else if (command.equals(Constants.leave.getConstant())) {
 			if (commandInput.length != 2) {
 				System.out.println("Invalid input");
 			} else {
 				int slotId = Integer.parseInt(commandInput[1]);
 				leave(slotId);
 			}
-		} else if ("status".equals(command)) {
+		} else if (command.equals(Constants.status.getConstant())) {
 			if (commandInput.length != 1) {
 				System.out.println("Invalid input");
 			} else {
 				status();
 			}
-		} else if ("registration_numbers_for_cars_with_colour".equals(command)) {
+		} else if (command.equals(Constants.registerColor.getConstant())) {
 			if (commandInput.length != 2) {
 				System.out.println("Invalid input");
 			} else {
 				String color = commandInput[1];
 				registration_numbers_for_cars_with_colour(color);
 			}
-		} else if ("slot_numbers_for_cars_with_colour".equals(command)) {
+		} else if (command.equals(Constants.slotColor.getConstant())) {
 			if (commandInput.length != 2) {
 				System.out.println("Invalid input");
 			} else {
 				String color = commandInput[1];
 				slot_numbers_for_cars_with_colour(color);
 			}
-		} else if ("slot_number_for_registration_number".equals(command)) {
+		} else if (command.equals(Constants.slotRegister.getConstant())) {
 			if (commandInput.length != 2) {
 				System.out.println("Invalid input");
 			} else {
@@ -159,39 +145,22 @@ public class App {
 
 	private static void processFileInput(String fileName) {
 		BufferedReader br = null;
-		FileReader fr = null;
 		try {
-
-			// br = new BufferedReader(new FileReader(FILENAME));
-			fr = new FileReader(fileName);
-			br = new BufferedReader(fr);
-
-			String sCurrentLine;
-
-			while ((sCurrentLine = br.readLine()) != null) {
-				processCommand(sCurrentLine);
+			br = new BufferedReader(new FileReader(fileName));
+			
+			String currentLine;
+			while ((currentLine = br.readLine()) != null) {
+				processCommand(currentLine);
 			}
-
 		} catch (IOException e) {
-
 			e.printStackTrace();
-
 		} finally {
 			try {
-
 				if (br != null)
 					br.close();
-
-				if (fr != null)
-					fr.close();
-
 			} catch (IOException ex) {
-
 				ex.printStackTrace();
-
 			}
-
 		}
-
 	}
 }

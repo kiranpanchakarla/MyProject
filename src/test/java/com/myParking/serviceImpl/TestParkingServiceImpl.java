@@ -24,41 +24,38 @@ public class TestParkingServiceImpl {
 
 	@Test
 	public void testCreateParkingLot() {
-		parkingService.createParkingLot(numSlots);
-
+		int capacity = parkingService.createParkingLot(numSlots);
+		assertEquals(6, capacity);
 	}
 
 	@Test
 	public void testPark() {
+		parkingService = new ParkingServiceImpl();
 		testCreateParkingLot();
+		
 		int slotId = parkingService.park(new Vehicle("KA-01-HH-1234", "White"));
 		assertEquals(1, slotId);
-		System.out.println("Allocated slot number:" + slotId);
 
 		slotId = parkingService.park(new Vehicle("KA-01-HH-9999", "White"));
 		assertEquals(2, slotId);
-		System.out.println("Allocated slot number:" + slotId);
 
 		slotId = parkingService.park(new Vehicle("KA-01-BB-0001", "Black"));
 		assertEquals(3, slotId);
-		System.out.println("Allocated slot number:" + slotId);
 
 		slotId = parkingService.park(new Vehicle("KA-01-HH-7777", "Red"));
 		assertEquals(4, slotId);
-		System.out.println("Allocated slot number:" + slotId);
 
 		slotId = parkingService.park(new Vehicle("KA-01-HH-2701", "Blue"));
 		assertEquals(5, slotId);
-		System.out.println("Allocated slot number:" + slotId);
 
 		slotId = parkingService.park(new Vehicle("KA-01-HH-3141", "Black"));
 		assertEquals(6, slotId);
-		System.out.println("Allocated slot number:" + slotId);
 
 	}
 
 	@Test
 	public void testLeave() {
+		parkingService = new ParkingServiceImpl();
 		testCreateParkingLot();
 		testPark();
 		parkingService.leave(areaId);
@@ -66,6 +63,7 @@ public class TestParkingServiceImpl {
 
 	@Test
 	public void testGetParkinglotStatus() {
+		parkingService = new ParkingServiceImpl();
 		testCreateParkingLot();
 		testPark();
 		testLeave();
@@ -75,6 +73,7 @@ public class TestParkingServiceImpl {
 	
 	@Test
 	public void getDetials() {
+		parkingService = new ParkingServiceImpl();
 		testCreateParkingLot();
 		testPark();
 		testLeave();

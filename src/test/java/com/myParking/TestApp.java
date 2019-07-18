@@ -1,8 +1,6 @@
 package com.myParking;
 
-import static org.junit.Assert.*;
-
-import java.util.List;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -12,7 +10,7 @@ import com.myParking.service.ParkingService;
 import com.myParking.serviceImpl.ParkingServiceImpl;
 import com.myParking.util.Constants;
 
-public class AppTest {
+public class TestApp {
 
 	static ParkingService parkingService;
 	
@@ -23,8 +21,9 @@ public class AppTest {
 	
 	@Test
 	public void testParkLeave() {
-		parkingService.createParkingLot(15);
-		
+		parkingService = new ParkingServiceImpl();
+		int capacity = parkingService.createParkingLot(15);
+		assertEquals(15, capacity);
 		 for(int c = 1; c <= 15; c++)
 	        {
 	            try
@@ -50,8 +49,8 @@ public class AppTest {
     public void testGetVehiclesByColor()
     {
 		parkingService = new ParkingServiceImpl();
-        parkingService.createParkingLot(15);
-
+        int capacity = parkingService.createParkingLot(15);
+        assertEquals(15, capacity);
         for(int c = 1; c <= 10; c++)
         {
             try
@@ -87,8 +86,8 @@ public class AppTest {
     public void testGetSlotForVehicle()
     {
 		parkingService = new ParkingServiceImpl();
-        parkingService.createParkingLot(12);
-
+        int capacity = parkingService.createParkingLot(12);
+        assertEquals(12, capacity);
         for(int c = 1; c <= 12; c++)
         {
             try
@@ -112,8 +111,8 @@ public class AppTest {
     public void testGetSlots()
     {
     	parkingService = new ParkingServiceImpl();
-        parkingService.createParkingLot(5);
-
+        int capacity = parkingService.createParkingLot(5);
+        assertEquals(5, capacity);
         for(int c = 1; c <= 5; c++)
         {
             try
