@@ -24,7 +24,8 @@ public class TestParkingServiceImpl {
 
 	@Test
 	public void testCreateParkingLot() {
-		int capacity = parkingService.createParkingLot(numSlots);
+		parkingService = new ParkingServiceImpl();
+		int capacity = parkingService.createParkingLot(6);
 		assertEquals(6, capacity);
 	}
 

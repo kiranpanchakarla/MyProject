@@ -84,7 +84,7 @@ public class App {
 	}
 
 	private static void processCommand(String commandln) {
-		String sample = commandln.trim();
+		String sample = commandln.trim().toLowerCase();
 		String[] commandInput = sample.trim().split("\\s+");
 		String command = commandInput[0];
 		 
