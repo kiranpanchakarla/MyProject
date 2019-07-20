@@ -26,9 +26,5 @@ public class ParkingArea{
 		this.vehicle = vehicle;
 	}
 
-	@Override
-	public String toString() {
-		return "ParkingArea [id=" + id + ", vehicle=" + vehicle + "]";
-	}
 
 }

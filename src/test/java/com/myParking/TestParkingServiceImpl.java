@@ -1,4 +1,4 @@
-package com.myParking.serviceImpl;
+package com.myParking;
 
 import static org.junit.Assert.assertEquals;
 
@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import com.myParking.model.Vehicle;
 import com.myParking.service.ParkingService;
+import com.myParking.serviceImpl.ParkingServiceImpl;
 import com.myParking.util.Constants;
 
 public class TestParkingServiceImpl {
@@ -28,7 +29,34 @@ public class TestParkingServiceImpl {
 		int capacity = parkingService.createParkingLot(6);
 		assertEquals(6, capacity);
 	}
+	
+	@Test
+	public void testIncrementInParkingLot() {
+		parkingService = new ParkingServiceImpl();
+		int capacity = parkingService.createParkingLot(6);
+		assertEquals(6, capacity);
+		
+		int capacity1 = parkingService.createParkingLot(6);
+		assertEquals(12, capacity1);
+		
+	}
+	
+	@Test
+	public void testGetPosition() {
+		parkingService = new ParkingServiceImpl();
+		testCreateParkingLot();
+		
+		int postion = parkingService.getPosition();
+		assertEquals(0, postion);
+	}
 
+	@Test
+	public void testParkWithoutSlots() {
+		parkingService = new ParkingServiceImpl();
+		
+		int slotId = parkingService.park(new Vehicle("KA-01-HH-1234", "White"));
+		assertEquals(0, slotId);
+	}
 	@Test
 	public void testPark() {
 		parkingService = new ParkingServiceImpl();
@@ -57,9 +85,11 @@ public class TestParkingServiceImpl {
 	@Test
 	public void testLeave() {
 		parkingService = new ParkingServiceImpl();
+		parkingService.leave(10);
 		testCreateParkingLot();
 		testPark();
 		parkingService.leave(areaId);
+		parkingService.leave(15);
 	}
 
 	@Test
@@ -75,6 +105,7 @@ public class TestParkingServiceImpl {
 	@Test
 	public void getDetials() {
 		parkingService = new ParkingServiceImpl();
+		parkingService.getDetials(color, Constants.registerColor.getConstant());
 		testCreateParkingLot();
 		testPark();
 		testLeave();
@@ -87,5 +118,5 @@ public class TestParkingServiceImpl {
 		parkingService.getDetials(registrationNumber, Constants.slotRegister.getConstant());
 
 	}
-
+	
 }

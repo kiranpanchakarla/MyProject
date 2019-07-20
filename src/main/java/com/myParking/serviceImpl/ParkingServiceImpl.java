@@ -1,5 +1,9 @@
 package com.myParking.serviceImpl;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Arrays;
 
 import com.myParking.model.ParkingArea;
@@ -38,6 +42,7 @@ public class ParkingServiceImpl implements ParkingService {
 				pa.setId(slot);
 				pa.setVehicle(vehicle);
 				parkingList[position] = pa;
+				System.out.println("Allocated slot number: " + slot);
 			} else {
 				System.out.println("Sorry, parking lot is full");
 			}
@@ -49,15 +54,13 @@ public class ParkingServiceImpl implements ParkingService {
 
 	}
 
-	private int getPosition() {
+	public int getPosition() {
 		int slot = -1;
 		if (parkingList != null) {
-			if (parkingList.length != 0) {
-				for (int i = 0; i < parkingList.length; i++) {
-					if (parkingList[i] == null) {
-						slot = i;
-						break;
-					}
+			for (int i = 0; i < parkingList.length; i++) {
+				if (parkingList[i] == null) {
+					slot = i;
+					break;
 				}
 			}
 		}
@@ -94,7 +97,7 @@ public class ParkingServiceImpl implements ParkingService {
 	public void getDetials(String details, String method) {
 
 		String result = "";
-		//int slot = 0;
+		// int slot = 0;
 		if (parkingList != null) {
 			for (int i = 0; i < parkingList.length; i++) {
 				if (parkingList[i] != null) {
@@ -115,22 +118,113 @@ public class ParkingServiceImpl implements ParkingService {
 				}
 
 			}
-            
-			/*if (method.equals(Constants.slotRegister.getConstant())) {
-				if (slot != 0) {
-					System.out.println(slot);
-				} else {
-					System.out.println("Not found");
-				}
+
+			/*
+			 * if (method.equals(Constants.slotRegister.getConstant())) { if (slot != 0) {
+			 * System.out.println(slot); } else { System.out.println("Not found"); } } else
+			 * { System.out.println(result.substring(1)); }
+			 */
+			if (result != "") {
+				System.out.println(result.substring(1));
 			} else {
-				System.out.println(result.substring(1));
-			}*/
-			if( result != "") {
-				System.out.println(result.substring(1));
-			}else {
 				System.out.println("Not found");
 			}
-			
+
 		}
+	}
+
+	public void processFile(String fileName) {
+
+		BufferedReader br = null;
+		FileReader fr = null;
+		try {
+			fr = new FileReader(fileName);
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+
+			br = new BufferedReader(fr);
+
+			String currentLine;
+			while ((currentLine = br.readLine()) != null) {
+				processCommand(currentLine);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null)
+					br.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+
+	}
+
+	public void processCommand(String commandln) {
+
+		String sample = commandln.trim().toLowerCase();
+		String[] commandInput = sample.trim().split("\\s+");
+		String command = commandInput[0];
+
+		if (command.contains(Constants.create.getConstant())) {
+			if (commandInput.length != 2) {
+				System.out.println("Invalid input");
+			} else {
+				int nrOfSlots = Integer.parseInt(commandInput[1]);
+				createParkingLot(nrOfSlots);
+			}
+		} else if (command.equals(Constants.park.getConstant())) {
+			if (commandInput.length != 3) {
+				System.out.println("Invalid input");
+			} else {
+				String registrationNumber = commandInput[1];
+				String color = commandInput[2];
+				Vehicle vehilce = new Vehicle();
+				vehilce.setRegistrationNo(registrationNumber);
+				vehilce.setColor(color);
+				park(vehilce);
+			}
+		} else if (command.equals(Constants.leave.getConstant())) {
+			if (commandInput.length != 2) {
+				System.out.println("Invalid input");
+			} else {
+				int slotId = Integer.parseInt(commandInput[1]);
+				leave(slotId);
+			}
+		} else if (command.equals(Constants.status.getConstant())) {
+			if (commandInput.length != 1) {
+				System.out.println("Invalid input");
+			} else {
+				getParkinglotStatus();
+			}
+		} else if (command.equals(Constants.registerColor.getConstant())) {
+			if (commandInput.length != 2) {
+				System.out.println("Invalid input");
+			} else {
+				String color = commandInput[1];
+				getDetials(color, Constants.registerColor.getConstant());
+			}
+		} else if (command.equals(Constants.slotColor.getConstant())) {
+			if (commandInput.length != 2) {
+				System.out.println("Invalid input");
+			} else {
+				String color = commandInput[1];
+				getDetials(color, Constants.slotColor.getConstant());
+			}
+		} else if (command.equals(Constants.slotRegister.getConstant())) {
+			if (commandInput.length != 2) {
+				System.out.println("Invalid input");
+			} else {
+				String regNo = commandInput[1];
+				getDetials(regNo, Constants.slotRegister.getConstant());
+			}
+		} else {
+			System.out.println("Invalid command");
+		}
+
 	}
 }
