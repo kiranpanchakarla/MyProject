@@ -2,9 +2,10 @@ package com.myParking.model;
 
 public class Vehicle {
 
-	private String registrationNo;
-	private String color;
+	private String registrationNo; // vehicle registration number
+	private String color; // vehicle color
 
+	// Constructor
 	public Vehicle() {
 	}
 
@@ -13,6 +14,7 @@ public class Vehicle {
 		this.color = color;
 	}
 
+	// Getters and Setters
 	public String getRegistrationNo() {
 		return registrationNo;
 	}

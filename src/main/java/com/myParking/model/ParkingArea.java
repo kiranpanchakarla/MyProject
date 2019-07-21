@@ -1,15 +1,17 @@
 package com.myParking.model;
 
-public class ParkingArea{
+public class ParkingArea {
 
-	private int id;
+	private int id; // parking slot number
 
-	private Vehicle vehicle;
+	private Vehicle vehicle; // vehicle parked in the slot
 
+	// Constructor
 	public ParkingArea() {
 
 	}
 
+	// Getter and Setters
 	public int getId() {
 		return id;
 	}
@@ -25,6 +27,5 @@ public class ParkingArea{
 	public void setVehicle(Vehicle vehicle) {
 		this.vehicle = vehicle;
 	}
-
 
 }

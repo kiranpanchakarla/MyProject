@@ -19,26 +19,26 @@ public class ParkingServiceImpl implements ParkingService {
 
 	}
 
+	// Creates a new parking area with the capacity entered.
 	public int createParkingLot(int capacity) {
-		if (parkingList == null) {
+		if (parkingList == null) { // if parkingList is null, creates new parkingList
 			parkingList = new ParkingArea[capacity];
-		} else {// can increase the size of array
+		} else {// can increase the size of parkingList
 			parkingList = Arrays.copyOf(parkingList, parkingList.length + capacity);
 		}
-		// parkingList = new ParkingArea[capacity];
 		int slots = parkingList.length;
 		System.out.println("Created a parking lot with " + slots + " slots");
 		return slots;
 	}
 
+	// park vehicle in the parking slot
 	public int park(Vehicle vehicle) {
 
-		int position = getPosition();
-		int slot = position + 1;
+		int position = getPosition(); // checks which position of parkingList is empty
+		int slot = position + 1; // add 1 as position starts from 0
 		if (parkingList != null) {
 			if (position >= 0) {
-				ParkingArea pa = new ParkingArea();
-
+				ParkingArea pa = new ParkingArea(); // park vehicle in empty slot
 				pa.setId(slot);
 				pa.setVehicle(vehicle);
 				parkingList[position] = pa;
@@ -49,12 +49,11 @@ public class ParkingServiceImpl implements ParkingService {
 		} else {
 			System.out.println("Invalid Command");
 		}
-
 		return slot;
-
 	}
 
-	public int getPosition() {
+	// get position of parkingList which is null
+	public int getPosition() { // return which position is null in the parkingList
 		int slot = -1;
 		if (parkingList != null) {
 			for (int i = 0; i < parkingList.length; i++) {
@@ -68,10 +67,11 @@ public class ParkingServiceImpl implements ParkingService {
 		return slot;
 	}
 
+	// when vehicle leaves the parking area, make that position to null
 	public int leave(int areaId) {
-		if (parkingList != null) {
+		if (parkingList != null) {// null check
 			if (parkingList.length > areaId) {
-				parkingList[areaId - 1] = null;
+				parkingList[areaId - 1] = null;// set parkingList position to null
 				System.out.println("Slot number " + areaId + " is free");
 			} else {
 				System.out.println("Slot number " + areaId + " doesnt exists!");
@@ -82,8 +82,9 @@ public class ParkingServiceImpl implements ParkingService {
 		return areaId;
 	}
 
+	// get list of vehicles parked in parking area
 	public void getParkinglotStatus() {
-		if (parkingList != null) {
+		if (parkingList != null) {// null check
 			System.out.println("Slot No." + " " + "Registration No" + " " + "Colour");
 			for (ParkingArea e : parkingList) {
 				if (e != null) {
@@ -94,22 +95,25 @@ public class ParkingServiceImpl implements ParkingService {
 		}
 	}
 
+	// get slot number, color and registration number based on requirement
 	public void getDetials(String details, String method) {
 
 		String result = "";
-		// int slot = 0;
-		if (parkingList != null) {
+		if (parkingList != null) {// null check
 			for (int i = 0; i < parkingList.length; i++) {
 				if (parkingList[i] != null) {
+					// get slot number based on color
 					if (method.equals(Constants.slotColor.getConstant())) {
 						if (parkingList[i].getVehicle().getColor().equals(details)) {
 							result = result + " " + (i + 1);
 						}
 					} else if (method.equals(Constants.registerColor.getConstant())) {
+						// get registration number based on color
 						if (parkingList[i].getVehicle().getColor().equals(details)) {
 							result = result + "," + parkingList[i].getVehicle().getRegistrationNo();
 						}
 					} else {
+						// get slot number based on registration number
 						if (parkingList[i].getVehicle().getRegistrationNo().equals(details)) {
 							result = " " + Integer.toString(i + 1);
 						}
@@ -119,11 +123,6 @@ public class ParkingServiceImpl implements ParkingService {
 
 			}
 
-			/*
-			 * if (method.equals(Constants.slotRegister.getConstant())) { if (slot != 0) {
-			 * System.out.println(slot); } else { System.out.println("Not found"); } } else
-			 * { System.out.println(result.substring(1)); }
-			 */
 			if (result != "") {
 				System.out.println(result.substring(1));
 			} else {
@@ -132,7 +131,7 @@ public class ParkingServiceImpl implements ParkingService {
 
 		}
 	}
-
+    // Read input file
 	public void processFile(String fileName) {
 
 		BufferedReader br = null;
@@ -163,7 +162,7 @@ public class ParkingServiceImpl implements ParkingService {
 		}
 
 	}
-
+    //process commands entered by user
 	public void processCommand(String commandln) {
 
 		String sample = commandln.trim().toLowerCase();
